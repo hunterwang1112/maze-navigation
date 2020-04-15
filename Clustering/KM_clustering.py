@@ -1,32 +1,34 @@
 import pandas as pd
 import glob
 from sklearn.cluster import KMeans
-import matplotlib.pyplot as plt
 
 
 def main():
     feature_list = []
     subject_list = []
-    directoryPath = '/Users/wangyan/Desktop/Research/Maze_Research/Parsed_Data/'
+
+    directoryPath = '/Users/wangyan/Desktop/Research/Maze_Research/Maze-Navigation/Parsed_Data/'
 
     for file_name in glob.glob(directoryPath + '*.csv'):
         df = pd.read_csv(file_name)
-        feature = list(df['posX'].values[0:30000])
-        feature2 = list(df['posZ'].values[0:30000])
-        feature3 = list(df['rotX'].values[0:30000])
-        feature4 = list(df['rotZ'].values[0:30000])
+
+        # read in the data on X and Z position plus the rotation
+        feature = list(df['posX'].values[0:30000:10])
+        feature2 = list(df['posZ'].values[0:30000:10])
+        feature3 = list(df['rotX'].values[0:30000:10])
+        feature4 = list(df['rotZ'].values[0:30000:10])
         feature.extend(feature2)
         feature.extend(feature3)
         feature.extend(feature4)
-        if len(feature) == 120000:
+
+        # Select the data with 12000 frames; the other subjects not with 120000 frames are not considered
+        if len(feature) == 12000:
             feature_list.append(feature)
-            subject_list.append(file_name[58:62])
+            # Each csv file is named with 4 letters, so take the 4 letters as their names.
+            subject_list.append(file_name[74:78])
 
     x_kmeans = KMeans(n_clusters=10, random_state=0)
     y_kmeans = x_kmeans.fit_predict(feature_list)
-
-    print(y_kmeans)
-    print(subject_list)
 
     clusters = dict()
     for i in range(len(y_kmeans)):
@@ -35,6 +37,8 @@ def main():
         else:
             clusters[y_kmeans[i]] = [subject_list[i]]
 
+    # The output is a dictionary where the keys are the cluster number and their corresponding values are the elements
+    # in each clusters
     print(clusters)
 
 
