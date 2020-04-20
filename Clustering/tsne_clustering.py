@@ -19,18 +19,21 @@ def main():
         feature2 = list(df['posZ'].values[0:30000:10])
         feature3 = list(df['rotX'].values[0:30000:10])
         feature4 = list(df['rotZ'].values[0:30000:10])
+        feature5 = list(df['rotZ'].values[0:30000:10])
+
         feature.extend(feature2)
         feature.extend(feature3)
         feature.extend(feature4)
+        feature.extend(feature5)
 
-        # Select the data with 12000 frames; the other subjects not with 120000 frames are not considered
-        if len(feature) == 12000:
+        # Select the data with 15000 frames; the other subjects not with 15000 frames are not considered
+        if len(feature) == 15000:
             feature_list.append(feature)
 
     # Option 1: First do the PCA without standardization to reduce the dimension to 50, then do the tsne
-    pca = PCA(n_components=50)
-    principalComponents = pca.fit_transform(feature_list)
-    X_embedded = TSNE(n_components=2).fit_transform(principalComponents)
+    # pca = PCA(n_components=50)
+    # principalComponents = pca.fit_transform(feature_list)
+    # X_embedded = TSNE(n_components=2).fit_transform(principalComponents)
 
     # Option 2: First do the PCA with standardization to reduce the dimension to 50, then do the tsne
     # pca = PCA(n_components=50)
@@ -39,12 +42,12 @@ def main():
     # X_embedded = TSNE(n_components=2).fit_transform(principalComponents)
 
     # Option 3: Directly do the tsne with original feature data
-    # X_embedded = TSNE(n_components=2).fit_transform(feature_list)
+    X_embedded = TSNE(n_components=2).fit_transform(feature_list)
 
     tsneDF = pd.DataFrame(X_embedded)
 
     # display the scatter plot
-    plt.scatter(tsneDF[0], tsneDF[1], alpha=0.1, color='black')
+    plt.scatter(tsneDF[0], tsneDF[1], alpha=1)
     plt.show()
 
 

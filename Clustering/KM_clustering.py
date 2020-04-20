@@ -17,12 +17,15 @@ def main():
         feature2 = list(df['posZ'].values[0:30000:10])
         feature3 = list(df['rotX'].values[0:30000:10])
         feature4 = list(df['rotZ'].values[0:30000:10])
+        feature5 = list(df['rotZ'].values[0:30000:10])
+
         feature.extend(feature2)
         feature.extend(feature3)
         feature.extend(feature4)
+        feature.extend(feature5)
 
-        # Select the data with 12000 frames; the other subjects not with 120000 frames are not considered
-        if len(feature) == 12000:
+        # Select the data with 15000 frames; the other subjects not with 15000 frames are not considered
+        if len(feature) == 15000:
             feature_list.append(feature)
             # Each csv file is named with 4 letters, so take the 4 letters as their names.
             subject_list.append(file_name[74:78])
